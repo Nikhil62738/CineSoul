@@ -14,6 +14,8 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -54,6 +56,7 @@
             <span class="camera-lens"></span>
             <span class="camera-flare"></span>
           </div>
+
           <div class="floating-card floating-card-one">
             <span>Wedding Reel</span>
             <strong>Haldi Frames</strong>
@@ -77,195 +80,115 @@
           <h2>Real moments shaped into cinematic highlights.</h2>
         </div>
         <div class="reel-controls" aria-label="Reel navigation">
-          <button class="reel-button" type="button" data-scroll-reels="left" aria-label="Scroll reels left">←</button>
-          <button class="reel-button" type="button" data-scroll-reels="right" aria-label="Scroll reels right">→</button>
+          <button class="reel-button" type="button" data-scroll-reels="left" aria-label="Scroll reels left">&larr;</button>
+          <button class="reel-button" type="button" data-scroll-reels="right" aria-label="Scroll reels right">&rarr;</button>
         </div>
       </div>
+
       <div class="work-grid">
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/Drone shoot.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Aerial Perspectives: Capturing the World from Above</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/haldi-celebration.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Golden Rituals: Haldi Ceremony Highlights</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/Jayanti.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Cultural Reverence: Jayanti Festivities</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/Mehendi-celebration.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Art in Motion: Mehendi Traditions</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/Model shoot.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Elegance in Frame: Professional Portrait Session</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/New Purchase.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Unboxing Joy: First Impressions</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/New purchase2.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Celebrating Acquisitions: A Fresh Start</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/Wedding card.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Design Showcase: Wedding Invitation Concept</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/Wedding card2.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
             <h3>Creative Variations: Wedding Card Animation</h3>
           </div>
         </article>
+
         <article class="work-card">
-          <video
-            class="work-video"
-            data-hover-video
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster=""
-          >
+          <video class="work-video" data-hover-video loop playsinline preload="metadata">
             <source src="assets/reels/Wedding invite.mp4" type="video/mp4">
           </video>
-          <button class="audio-toggle" type="button" aria-label="Toggle reel sound">Click to unmute</button>
           <div class="work-overlay"></div>
           <div class="work-content">
             <p>Instagram Reel</p>
@@ -273,6 +196,7 @@
           </div>
         </article>
       </div>
+
       <p class="work-note">
         All uploaded reels are shown in Instagram-style vertical cards. Scroll horizontally to explore more.
       </p>
@@ -452,6 +376,7 @@
           <label>
             Shoot Date
             <input type="date" id="date" name="date" required>
+            <span class="field-note">We'll check availability for your selected date.</span>
           </label>
           <label>
             Shoot Location
@@ -477,11 +402,12 @@
   </main>
 
   <footer class="site-footer">
-    <p>Cinesoul 45 Cinematic Creator</p>
+    <p>&copy; 2026 Cinesoul 45 | Design by Nikhil Chopade</p>
     <a href="#home">Back to top</a>
   </footer>
 
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="script.js"></script>
 </body>
 </html>

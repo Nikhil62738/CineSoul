@@ -5,7 +5,37 @@ const hoverVideos = document.querySelectorAll("[data-hover-video]");
 const reelRail = document.querySelector(".work-grid");
 const reelButtons = document.querySelectorAll("[data-scroll-reels]");
 const threeBackground = document.getElementById("threeBackground");
+
 let soundUnlocked = false;
+let activeAudioVideo = null;
+
+// Add booked dates here (YYYY-MM-DD format)
+const bookedDates = [
+  "2026-04-25",
+  "2026-04-26",
+  "2026-04-27",
+  "2026-04-28",
+  "2026-04-29",
+  "2026-04-30",
+];
+
+const dateInput = document.getElementById("date");
+
+// Initialize Flatpickr for a better date picker experience
+if (dateInput && typeof flatpickr !== "undefined") {
+  flatpickr(dateInput, {
+    dateFormat: "Y-m-d",
+    minDate: "today",
+    disable: bookedDates,
+    onDayCreate: function(dObj, dStr, fp, dayElem) {
+      const dateStr = dayElem.dateObj.toISOString().split("T")[0];
+      if (bookedDates.includes(dateStr)) {
+        dayElem.classList.add("booked-date");
+        dayElem.title = "Already booked";
+      }
+    }
+  });
+}
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -30,6 +60,11 @@ form.addEventListener("submit", (event) => {
     `Project Details: ${details.message}`,
   ].join("\n");
 
+  if (bookedDates.includes(details.date)) {
+    alert("Sorry, this date is already booked. Please select a different date.");
+    return;
+  }
+
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
   window.open(whatsappUrl, "_blank");
 });
@@ -43,17 +78,13 @@ document.addEventListener("keydown", markSoundUnlocked);
 
 const updateAudioState = (video, shouldUnmute) => {
   const card = video.closest(".work-card");
-  const toggle = card?.querySelector(".audio-toggle");
-
   video.muted = !shouldUnmute;
   card?.classList.toggle("has-audio", shouldUnmute);
 
-  if (toggle) {
-    toggle.textContent = shouldUnmute ? "Click to mute" : "Click to unmute";
-    toggle.setAttribute(
-      "aria-label",
-      shouldUnmute ? "Mute reel sound" : "Unmute reel sound"
-    );
+  if (shouldUnmute) {
+    activeAudioVideo = video;
+  } else if (activeAudioVideo === video) {
+    activeAudioVideo = null;
   }
 };
 
@@ -72,18 +103,23 @@ const resetReelAudio = (exceptVideo = null) => {
 
 hoverVideos.forEach((video) => {
   const card = video.closest(".work-card");
-  const toggle = card?.querySelector(".audio-toggle");
 
   const playVideo = () => {
     resetReelAudio(video);
-    updateAudioState(video, soundUnlocked);
+    // Try to play with sound if possible. 
+    // Browser might still block sound if no interaction, so we fallback to muted if play fails.
+    updateAudioState(video, true); 
+    
     const playPromise = video.play();
     card?.classList.add("is-playing");
 
     if (playPromise) {
       playPromise.catch(() => {
+        // Fallback to muted if unmuted play fails (common for autoplay without interaction)
         updateAudioState(video, false);
-        card?.classList.remove("is-playing");
+        video.play().catch(() => {
+          card?.classList.remove("is-playing");
+        });
       });
     }
   };
@@ -91,7 +127,11 @@ hoverVideos.forEach((video) => {
   const pauseVideo = () => {
     video.pause();
     video.currentTime = 0;
-    updateAudioState(video, false);
+
+    if (activeAudioVideo !== video) {
+      updateAudioState(video, false);
+    }
+
     card?.classList.remove("is-playing");
   };
 
@@ -101,44 +141,17 @@ hoverVideos.forEach((video) => {
   card?.addEventListener("focusout", pauseVideo);
   card?.addEventListener("touchstart", playVideo, { passive: true });
 
-  toggle?.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    soundUnlocked = true;
-    const shouldUnmute = video.muted;
-
-    if (shouldUnmute) {
-      resetReelAudio(video);
-      card?.classList.add("is-playing");
-    }
-
-    updateAudioState(video, shouldUnmute);
-
-    const playPromise = video.play();
-    if (playPromise) {
-      playPromise.catch(() => {
-        updateAudioState(video, false);
-      });
-    }
-  });
-
   card?.addEventListener("click", (event) => {
-    if (event.target instanceof HTMLElement && event.target.closest(".audio-toggle")) {
-      return;
-    }
-
     soundUnlocked = true;
-    const shouldUnmute = video.muted;
-
-    if (shouldUnmute) {
-      resetReelAudio(video);
-    }
-
-    updateAudioState(video, shouldUnmute);
+    updateAudioState(video, true);
     video.play().catch(() => {
       updateAudioState(video, false);
     });
+  });
+
+  video.addEventListener("ended", () => {
+    updateAudioState(video, false);
+    card?.classList.remove("is-playing");
   });
 });
 

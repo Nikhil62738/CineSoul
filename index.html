@@ -85,116 +85,8 @@
         </div>
       </div>
 
-      <div class="work-grid">
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/Drone shoot.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Aerial Perspectives: Capturing the World from Above</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/haldi-celebration.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Golden Rituals: Haldi Ceremony Highlights</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/Jayanti.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Cultural Reverence: Jayanti Festivities</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/Mehendi-celebration.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Art in Motion: Mehendi Traditions</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/Model shoot.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Elegance in Frame: Professional Portrait Session</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/New Purchase.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Unboxing Joy: First Impressions</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/New purchase2.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Celebrating Acquisitions: A Fresh Start</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/Wedding card.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Design Showcase: Wedding Invitation Concept</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/Wedding card2.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Creative Variations: Wedding Card Animation</h3>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <video class="work-video" data-hover-video loop playsinline preload="metadata">
-            <source src="assets/reels/Wedding invite.mp4" type="video/mp4">
-          </video>
-          <div class="work-overlay"></div>
-          <div class="work-content">
-            <p>Instagram Reel</p>
-            <h3>Invitation in Motion: Wedding Storytelling</h3>
-          </div>
-        </article>
+      <div class="work-grid" id="reelsGrid">
+        <!-- Dynamically populated by script.js -->
       </div>
 
       <p class="work-note">
@@ -376,7 +268,6 @@
           <label>
             Shoot Date
             <input type="date" id="date" name="date" required>
-            <span class="field-note">We'll check availability for your selected date.</span>
           </label>
           <label>
             Shoot Location
@@ -399,11 +290,11 @@
         </form>
       </div>
     </section>
-  </main>
 
-  <footer class="site-footer">
-    <p>&copy; 2026 Cinesoul 45 | Design by Nikhil Chopade</p>
-    <a href="#home">Back to top</a>
+    <div class="footer-links">
+      
+      <a href="#home">Back to top</a>
+    </div>
   </footer>
 
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>

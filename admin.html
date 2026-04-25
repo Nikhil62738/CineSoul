@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Cinesoul 45</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-container {
+      width: min(1180px, calc(100% - 2rem));
+      margin: 4rem auto;
+      min-height: 80vh;
+    }
+    
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .login-card {
+      background: var(--panel-strong);
+      padding: 3rem;
+      border-radius: 2rem;
+      border: 1px solid var(--line);
+      text-align: center;
+      width: min(400px, 90vw);
+    }
+
+    .login-card h2 {
+      margin-bottom: 2rem;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 1rem;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="three-background" id="threeBackground" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">Cine<span>Soul</span></a>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
+
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <p class="eyebrow">Access Restricted</p>
+      <h2>Admin Login</h2>
+      <input type="password" id="adminPass" placeholder="Enter Password">
+      <button class="button button-primary button-full" id="loginBtn">Login</button>
+    </div>
+  </div>
+
+  <main class="admin-container" id="adminContent" style="display: none;">
+    <section class="admin-header-row">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Admin Panel</p>
+          <h2>Command Center</h2>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <a href="index.html" class="button button-secondary">View Site</a>
+        <button class="button button-secondary" id="logoutBtn">Logout</button>
+      </div>
+    </section>
+
+    <!-- Dashboard Analytics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3 id="statReels">0</h3>
+        <p>Live Reels</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="statBooked">0</h3>
+        <p>Booked Dates</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="statAvailable">0</h3>
+        <p>Upcoming Bookings</p>
+      </div>
+    </div>
+
+    <div class="admin-main-grid">
+      <!-- Left Column: Management -->
+      <div class="admin-col">
+        <div class="admin-card">
+          <h3>Block Dates</h3>
+          <p class="field-note">Mark dates as already booked.</p>
+          <div class="admin-form-group">
+            <input type="date" id="blockDateInput">
+            <button class="button button-primary" id="addBlockDate">Block Date</button>
+          </div>
+          <div class="bulk-block">
+            <p class="field-note">Bulk Block (Range)</p>
+            <div class="admin-form-group">
+              <input type="date" id="blockStart" placeholder="Start">
+              <input type="date" id="blockEnd" placeholder="End">
+              <button class="button button-secondary" id="addBulkBlock">Block Range</button>
+            </div>
+          </div>
+          <ul class="admin-list" id="blockedDatesList">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+
+        <div class="admin-card">
+          <h3>Profile Settings</h3>
+          <p class="field-note">Update your contact info and brand.</p>
+          <form class="admin-form" id="settingsForm">
+            <label>WhatsApp Number
+              <input type="text" id="settingWhatsApp" placeholder="e.g. 918668262694">
+            </label>
+            <label>Instagram Handle
+              <input type="text" id="settingInsta" placeholder="@cinesoul_45">
+            </label>
+            <label>About Text
+              <textarea id="settingAbout" rows="3"></textarea>
+            </label>
+            <button class="button button-primary" type="submit">Save Settings</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Content & Logs -->
+      <div class="admin-col">
+        <div class="admin-card">
+          <h3>Portfolio (Reels)</h3>
+          <p class="field-note">Add new reels or drag to reorder them.</p>
+          <form class="admin-form" id="addReelForm">
+            <label class="file-upload-label">
+              <span id="fileUploadText">Select Video File (.mp4)</span>
+              <input type="file" id="reelVideoFile" accept="video/mp4,video/webm" style="display: none;">
+            </label>
+            <input type="hidden" id="reelVideoPath">
+            <input type="text" id="reelTitle" placeholder="Title" required>
+            <input type="text" id="reelCategory" placeholder="Category" required>
+            <button class="button button-primary" type="submit">Add Reel</button>
+            <p class="field-note" style="text-align: center; margin-top: -0.5rem;">Note: Please ensure the video file is placed in the 'assets/reels' folder manually.</p>
+          </form>
+          <div class="admin-reels-preview" id="adminReelsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Activity Log</h3>
+          <ul class="admin-list activity-list" id="activityLog">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Custom Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card">
+      <h3 id="modalTitle">Confirm Action</h3>
+      <p id="modalMessage">Are you sure?</p>
+      <div class="modal-actions">
+        <button class="button button-secondary" id="modalCancel">Cancel</button>
+        <button class="button button-primary" id="modalConfirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Cinesoul 45 | Admin Portal</p>
+  </footer>
+
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

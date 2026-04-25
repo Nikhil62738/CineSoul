@@ -1,41 +1,141 @@
-const whatsappNumber = "918668262694";
+let whatsappNumber = "918668262694";
 
 const form = document.getElementById("whatsappForm");
-const hoverVideos = document.querySelectorAll("[data-hover-video]");
-const reelRail = document.querySelector(".work-grid");
+const reelsGrid = document.getElementById("reelsGrid");
 const reelButtons = document.querySelectorAll("[data-scroll-reels]");
 const threeBackground = document.getElementById("threeBackground");
 
 let soundUnlocked = false;
 let activeAudioVideo = null;
 
-// Add booked dates here (YYYY-MM-DD format)
-const bookedDates = [
-  "2026-04-25",
-  "2026-04-26",
-  "2026-04-27",
-  "2026-04-28",
-  "2026-04-29",
-  "2026-04-30",
+// --- DYNAMIC SETTINGS ---
+const defaultSettings = {
+  whatsapp: "918668262694",
+  insta: "@cinesoul_45",
+  about: "Cinesoul 45 is a cinematic creator focused on weddings, celebrations, portraits, invitation reels, and artistic edits that feel premium and memorable."
+};
+
+const siteSettings = JSON.parse(localStorage.getItem("cinesoul_settings")) || defaultSettings;
+
+function applyDynamicSettings() {
+  // Update WhatsApp links
+  const whatsappNumber = siteSettings.whatsapp;
+  window.whatsappNumber = whatsappNumber; // Global for form use
+
+  // Update Instagram links
+  const instaLinks = document.querySelectorAll('a[href*="instagram.com"]');
+  instaLinks.forEach(link => {
+    link.href = `https://instagram.com/${siteSettings.insta.replace('@', '')}`;
+  });
+
+  // Update About text if elements exist
+  const aboutText = document.querySelector(".about-copy p");
+  if (aboutText) aboutText.textContent = siteSettings.about;
+}
+
+// Update WhatsApp number reference in form logic from settings
+if (siteSettings.whatsapp) {
+  whatsappNumber = siteSettings.whatsapp; 
+}
+
+// --- DATA MANAGEMENT ---
+const defaultReels = [
+  { path: "assets/reels/Drone shoot.mp4", title: "Aerial Perspectives: Capturing the World from Above", category: "Instagram Reel" },
+  { path: "assets/reels/haldi-celebration.mp4", title: "Golden Rituals: Haldi Ceremony Highlights", category: "Instagram Reel" },
+  { path: "assets/reels/Jayanti.mp4", title: "Cultural Reverence: Jayanti Festivities", category: "Instagram Reel" },
+  { path: "assets/reels/Mehendi-celebration.mp4", title: "Art in Motion: Mehendi Traditions", category: "Instagram Reel" },
+  { path: "assets/reels/Model shoot.mp4", title: "Elegance in Frame: Professional Portrait Session", category: "Instagram Reel" },
+  { path: "assets/reels/New Purchase.mp4", title: "Unboxing Joy: First Impressions", category: "Instagram Reel" },
+  { path: "assets/reels/New purchase2.mp4", title: "Celebrating Acquisitions: A Fresh Start", category: "Instagram Reel" },
+  { path: "assets/reels/Wedding card.mp4", title: "Design Showcase: Wedding Invitation Concept", category: "Instagram Reel" },
+  { path: "assets/reels/Wedding card2.mp4", title: "Creative Variations: Wedding Card Animation", category: "Instagram Reel" },
+  { path: "assets/reels/Wedding invite.mp4", title: "Invitation in Motion: Wedding Storytelling", category: "Instagram Reel" }
 ];
 
-const dateInput = document.getElementById("date");
+let reels = JSON.parse(localStorage.getItem("cinesoul_reels")) || defaultReels;
+let bookedDates = JSON.parse(localStorage.getItem("cinesoul_booked_dates")) || ["2026-04-25", "2026-04-26"];
 
-// Initialize Flatpickr for a better date picker experience
-if (dateInput && typeof flatpickr !== "undefined") {
-  flatpickr(dateInput, {
-    dateFormat: "Y-m-d",
-    minDate: "today",
-    disable: bookedDates,
-    onDayCreate: function(dObj, dStr, fp, dayElem) {
-      const dateStr = dayElem.dateObj.toISOString().split("T")[0];
-      if (bookedDates.includes(dateStr)) {
-        dayElem.classList.add("booked-date");
-        dayElem.title = "Already booked";
-      }
-    }
-  });
+const dateInput = document.getElementById("date");
+let fp = null;
+
+// --- DYNAMIC RENDERING ---
+
+function renderReels() {
+  if (!reelsGrid) return;
+  
+  reelsGrid.innerHTML = reels.map((reel, index) => `
+    <article class="work-card" data-index="${index}">
+      <video class="work-video" data-hover-video loop playsinline preload="metadata">
+        <source src="${reel.path}" type="video/mp4">
+      </video>
+      <div class="work-overlay"></div>
+      <div class="work-content">
+        <p>${reel.category}</p>
+        <h3>${reel.title}</h3>
+      </div>
+    </article>
+  `).join("");
+
+  // Re-initialize hover video listeners
+  initHoverVideos();
 }
+
+function initFlatpickr() {
+  if (dateInput && typeof flatpickr !== "undefined") {
+    fp = flatpickr(dateInput, {
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      disable: bookedDates,
+      onOpen: function() {
+        // Aggressively refresh bookedDates from localStorage when calendar opens
+        const freshDates = JSON.parse(localStorage.getItem("cinesoul_booked_dates"));
+        if (freshDates) {
+          bookedDates = freshDates;
+          fp.set("disable", bookedDates);
+        }
+      },
+      onChange: function(selectedDates, dateStr, instance) {
+        if (bookedDates.includes(dateStr)) {
+          alert("This date is already booked. Please select another date.");
+          instance.clear();
+        }
+      },
+      onDayCreate: function(dObj, dStr, fpInstance, dayElem) {
+        const dateStr = fpInstance.formatDate(dayElem.dateObj, "Y-m-d");
+        if (bookedDates.includes(dateStr)) {
+          dayElem.classList.add("booked-date");
+          dayElem.title = "Already booked";
+        }
+      }
+    });
+  }
+}
+
+// Initial calls
+renderReels();
+initFlatpickr();
+applyDynamicSettings();
+
+// --- REAL-TIME SYNC ---
+// This listens for changes made in other tabs (like the Admin Dashboard)
+window.addEventListener('storage', (e) => {
+  if (e.key === "cinesoul_booked_dates") {
+    bookedDates = JSON.parse(e.newValue);
+    if (fp) {
+      fp.set("disable", bookedDates);
+      fp.redraw();
+    }
+  }
+  if (e.key === "cinesoul_reels") {
+    reels = JSON.parse(e.newValue);
+    renderReels();
+  }
+  if (e.key === "cinesoul_settings") {
+    const newSettings = JSON.parse(e.newValue);
+    Object.assign(siteSettings, newSettings);
+    applyDynamicSettings();
+  }
+});
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -61,7 +161,7 @@ form.addEventListener("submit", (event) => {
   ].join("\n");
 
   if (bookedDates.includes(details.date)) {
-    alert("Sorry, this date is already booked. Please select a different date.");
+    alert("Date already book plz select another date");
     return;
   }
 
@@ -88,8 +188,8 @@ const updateAudioState = (video, shouldUnmute) => {
   }
 };
 
-const resetReelAudio = (exceptVideo = null) => {
-  hoverVideos.forEach((video) => {
+const resetReelAudio = (exceptVideo = null, videos) => {
+  videos.forEach((video) => {
     if (video === exceptVideo) {
       return;
     }
@@ -101,68 +201,69 @@ const resetReelAudio = (exceptVideo = null) => {
   });
 };
 
-hoverVideos.forEach((video) => {
-  const card = video.closest(".work-card");
+function initHoverVideos() {
+  const videos = document.querySelectorAll("[data-hover-video]");
+  
+  videos.forEach((video) => {
+    const card = video.closest(".work-card");
 
-  const playVideo = () => {
-    resetReelAudio(video);
-    // Try to play with sound if possible. 
-    // Browser might still block sound if no interaction, so we fallback to muted if play fails.
-    updateAudioState(video, true); 
-    
-    const playPromise = video.play();
-    card?.classList.add("is-playing");
+    const playVideo = () => {
+      resetReelAudio(video, videos);
+      updateAudioState(video, true); 
+      
+      const playPromise = video.play();
+      card?.classList.add("is-playing");
 
-    if (playPromise) {
-      playPromise.catch(() => {
-        // Fallback to muted if unmuted play fails (common for autoplay without interaction)
-        updateAudioState(video, false);
-        video.play().catch(() => {
-          card?.classList.remove("is-playing");
+      if (playPromise) {
+        playPromise.catch(() => {
+          updateAudioState(video, false);
+          video.play().catch(() => {
+            card?.classList.remove("is-playing");
+          });
         });
+      }
+    };
+
+    const pauseVideo = () => {
+      video.pause();
+      video.currentTime = 0;
+
+      if (activeAudioVideo !== video) {
+        updateAudioState(video, false);
+      }
+
+      card?.classList.remove("is-playing");
+    };
+
+    card?.addEventListener("mouseenter", playVideo);
+    card?.addEventListener("mouseleave", pauseVideo);
+    card?.addEventListener("focusin", playVideo);
+    card?.addEventListener("focusout", pauseVideo);
+    card?.addEventListener("touchstart", playVideo, { passive: true });
+
+    card?.addEventListener("click", (event) => {
+      soundUnlocked = true;
+      updateAudioState(video, true);
+      video.play().catch(() => {
+        updateAudioState(video, false);
       });
-    }
-  };
+    });
 
-  const pauseVideo = () => {
-    video.pause();
-    video.currentTime = 0;
-
-    if (activeAudioVideo !== video) {
+    video.addEventListener("ended", () => {
       updateAudioState(video, false);
-    }
-
-    card?.classList.remove("is-playing");
-  };
-
-  card?.addEventListener("mouseenter", playVideo);
-  card?.addEventListener("mouseleave", pauseVideo);
-  card?.addEventListener("focusin", playVideo);
-  card?.addEventListener("focusout", pauseVideo);
-  card?.addEventListener("touchstart", playVideo, { passive: true });
-
-  card?.addEventListener("click", (event) => {
-    soundUnlocked = true;
-    updateAudioState(video, true);
-    video.play().catch(() => {
-      updateAudioState(video, false);
+      card?.classList.remove("is-playing");
     });
   });
-
-  video.addEventListener("ended", () => {
-    updateAudioState(video, false);
-    card?.classList.remove("is-playing");
-  });
-});
+}
 
 reelButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    if (!reelRail) {
+    if (!reelsGrid) {
       return;
     }
 
     const direction = button.getAttribute("data-scroll-reels") === "left" ? -1 : 1;
-    reelRail.scrollBy({
+    reelsGrid.scrollBy({
       left: direction * 320,
       behavior: "smooth",
     });
